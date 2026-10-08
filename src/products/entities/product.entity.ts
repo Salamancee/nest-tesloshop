@@ -40,6 +40,14 @@ export class Product {
 
 
     //TAGS
+    @Column({
+        type: 'text',
+        array: true,
+        default: []
+    })
+    tags: string[]
+
+
     //IMAGES
     @BeforeInsert()
     checkSlugInsert() {
