@@ -81,7 +81,7 @@ export class ProductsService {
         await queryRuner.manager.delete(ProductImage, { product: { id } });
         product.images = images.map(image => this.productImageRepository.create({ url: image }));
       }
-      
+
 
       await queryRuner.manager.save(product);
       // this.productRepository.save(product);
@@ -106,5 +106,16 @@ export class ProductsService {
     if (error.code === '23505') throw new BadRequestException(error.detail);
     this.logger.error(error);
     throw new InternalServerErrorException("Unspected error, check server logs");
+  }
+
+
+  async deleteAllProducts() {
+    const query = this.productRepository.createQueryBuilder('product');
+
+    try {
+      return await query.delete().execute();
+    } catch (error) {
+      this.handleDbExceptions(error);
+    }
   }
 }
