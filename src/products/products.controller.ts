@@ -5,6 +5,8 @@ import { UpdateProductDto } from './dto/update-product.dto.js';
 import { PaginationDto } from '../common/dtos/pagination.dto.js';
 import { Auth } from '../auth/decorators/auth.decorator.js';
 import { ValidRoles } from '../auth/interfaces/index.js';
+import { GetUser } from '../auth/decorators/get-user.decorator.js';
+import { User } from '../auth/entities/user.entity.js';
 
 @Controller('products')
 // @Auth()
@@ -12,9 +14,9 @@ export class ProductsController {
   constructor(private readonly productsService: ProductsService) { }
 
   @Post()
-  @Auth(ValidRoles.admin)
-  create(@Body() createProductDto: CreateProductDto) {
-    return this.productsService.create(createProductDto);
+  @Auth()
+  create(@Body() createProductDto: CreateProductDto, @GetUser() user: User) {
+    return this.productsService.create(createProductDto, user);
   }
 
   @Get()

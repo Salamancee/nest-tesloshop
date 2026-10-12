@@ -6,6 +6,7 @@ import { DataSource, Repository } from 'typeorm';
 import { UpdateProductDto } from './dto/update-product.dto.js';
 import { PaginationDto } from '../common/dtos/pagination.dto.js';
 import { ProductImage } from './entities/index.js';
+import { User } from '../auth/entities/user.entity.js';
 
 @Injectable()
 export class ProductsService {
@@ -21,10 +22,10 @@ export class ProductsService {
     private readonly datasource: DataSource
   ) { }
 
-  async create(createProductDto: CreateProductDto) {
+  async create(createProductDto: CreateProductDto, user: User) {
     try {
       const { images = [], ...productDetails } = createProductDto;
-      const product = this.productRepository.create({ ...productDetails, images: images.map(image => this.productImageRepository.create({ url: image })) });
+      const product = this.productRepository.create({ ...productDetails, user, images: images.map(image => this.productImageRepository.create({ url: image })) });
       await this.productRepository.save(product);
 
       return { ...product, images };
