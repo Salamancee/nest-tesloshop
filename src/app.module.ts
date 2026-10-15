@@ -5,6 +5,13 @@ import { ProductsModule } from './products/products.module.js';
 import { CommonModule } from './common/common.module.js';
 import { SeedModule } from './seed/seed.module.js';
 import { AuthModule } from './auth/auth.module.js';
+import { FilesModule } from './files/files.module.js';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 @Module({
     imports: [
@@ -20,10 +27,14 @@ import { AuthModule } from './auth/auth.module.js';
             synchronize: true
 
         }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'public')
+        }),
         ProductsModule,
         CommonModule,
         SeedModule,
         AuthModule,
+        FilesModule,
     ]
 })
 export class AppModule { }
